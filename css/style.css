@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-size: xx-large;
+}
+body {
+    background-image: url("../images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+header {
+    margin: 3% 0 3% 0;
+    width: 100%;
+    font-weight: bold;
+}
+header form{
+    padding: 2%;
+    background-color: rgba(138, 138, 138, 0.9);
+    border-radius: 10px;
+    margin: auto;
+    width: 75%;
+    display: flex;
+    justify-content: center;
+}
+header form select,input{
+    padding: 0,7%;
+}
+td{
+    background-color: black;
+}
+table{
+    margin: auto;
+}

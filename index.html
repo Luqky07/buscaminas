@@ -1,12 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Buscaminas</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
+
 <body>
-    
+    <header>
+        <form id="form" method="post" action="">
+            <label>
+                Selecciona el tamaño del tablero
+                <select name="size">
+                    <optgroup label="Fácil">
+                        <option>8x8 5 minas</option>
+                        <option>16x16 10 minas</option>
+                    </optgroup>
+                    <optgroup label="Normal">
+                        <option selected>8x8 10 minas</option>
+                        <option>16x16 20 minas</option>
+                    </optgroup>
+                    <optgroup label="Dificil">
+                        <option>8x8 20 minas</option>
+                        <option>16x16 40 minas</option>
+                    </optgroup>
+                </select>
+            </label>
+            <input type="submit" value="Crear">
+        </form>
+    </header>
+    <article>
+        <table id="campo">
+
+        </table>
+    </article>
+    <script src="js/buscaminas.js"></script>
 </body>
+
 </html>
