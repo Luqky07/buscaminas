@@ -3,18 +3,17 @@ const campo = document.getElementById("campo");
 const form = document.getElementById("form");
 
 //Funciones
-function generarCampo(num){
+function generarCampo(size) {
     campo.innerHTML = "";
     let tablero = "";
-    for(let i = 0; i < num; i++){
+    for (let i = 0; i < size; i++) {
         tablero += "<tr>\n"
-        for(let j = 0; j < num; j++){
-            tablero += "<td id='" + i + "" + j +"'>Hola</td>\n"
+        for (let j = 0; j < size; j++) {
+            tablero += "<td id='" + i + "-" + j + "' class='casilla'></td>\n"
         }
         tablero += "</tr>\n";
     }
     campo.innerHTML = tablero;
-    
 }
 
 //Eventos

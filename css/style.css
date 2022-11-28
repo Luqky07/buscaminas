@@ -1,33 +1,51 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-size: xx-large;
 }
+
 body {
     background-image: url("../images/background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 header {
     margin: 3% 0 3% 0;
     width: 100%;
     font-weight: bold;
 }
-header form{
+
+header form {
     padding: 2%;
     background-color: rgba(138, 138, 138, 0.9);
     border-radius: 10px;
     margin: auto;
     width: 75%;
-    display: flex;
-    justify-content: center;
+    text-align: center;
 }
-header form select,input{
-    padding: 0,7%;
+
+header form input {
+    padding: 0.25%;
 }
-td{
+
+header form select {
+    padding: 0.25%;
+    margin: 0 4% 0 4%;
+}
+
+table {
+    margin: 0 auto 3% auto;
+    border: 1px solid black;
     background-color: black;
 }
-table{
-    margin: auto;
+
+table tr td {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+}
+
+.casilla {
+    background-color: rgb(128, 128, 128);
 }
