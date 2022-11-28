@@ -21,9 +21,9 @@ function generarCampo(size, bombs) {
     console.log(bombas);
 }
 
-function events(num) {
-    for (let i = 0; i < num; i++) {
-        for (let j = 0; j < num; j++) {
+function events(size) {
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
             let id = document.getElementById(i + "-" + j);
             id.addEventListener("click", () => {
                 id.className = "vacio";
@@ -33,8 +33,42 @@ function events(num) {
                         bomba.innerHTML = "<i class='fa-solid fa-bomb'></i>";
                         bomba.className = "vacio";
                     }
+                } else {
+                    comprobarAlrededor(id.id, size);
                 }
             })
+        }
+    }
+}
+
+function comprobarAlrededor(id, size) {
+    let cords = id.split("-");
+    let cont = 0;
+    for (let i = 1; i >= -1; i--) {
+        for (let j = 1; j >= -1; j--) {
+            let x = cords[0] - i;
+            let y = cords[1] - j;
+            if (x >= 0 && x < size && y >= 0 || y < size) {
+                if (bombas.includes((x + "-" + y))){
+                    cont++;
+                }
+            }
+        }
+    }
+    if(cont > 0){
+        document.getElementById(id).innerHTML = cont;
+        switch (cont) {
+            case 1:
+                document.getElementById(id).className = "green";
+                break;
+            case 2:
+                document.getElementById(id).className = "yellow";
+                break;
+            case 3:
+                document.getElementById(id).className = "orange";
+                break;
+            default:
+                document.getElementById(id).className = "red";
         }
     }
 }

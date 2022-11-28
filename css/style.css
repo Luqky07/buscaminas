@@ -53,3 +53,23 @@ table tr td {
 .vacio {
     background-color: rgb(180, 180, 180);
 }
+
+.green {
+    color: rgb(0, 128, 0);
+    background-color: rgba(0, 128, 0, 0.5);
+}
+
+.yellow {
+    color: rgb(255, 255, 0);
+    background-color: rgba(255, 255, 0, 0.5);
+}
+
+.orange {
+    color: rgb(255, 165, 0);
+    background-color: rgba(255, 165, 0, 0.5);
+}
+
+.red {
+    color: rgb(255, 0, 0);
+    background-color: rgba(255, 0, 0, 0.5);
+}
