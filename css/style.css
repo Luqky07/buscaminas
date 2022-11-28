@@ -49,3 +49,7 @@ table tr td {
 .casilla {
     background-color: rgb(128, 128, 128);
 }
+
+.vacio {
+    background-color: rgb(180, 180, 180);
+}

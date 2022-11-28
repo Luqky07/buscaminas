@@ -14,6 +14,19 @@ function generarCampo(size) {
         tablero += "</tr>\n";
     }
     campo.innerHTML = tablero;
+    events(size);
+}
+
+function events(num) {
+    for (let i = 0; i < num; i++) {
+        for (let j = 0; j < num; j++) {
+            let id = document.getElementById(i + "-" + j);
+            id.addEventListener("click", () => {
+                console.log(id.id);
+                id.className = "vacio";
+            })
+        }
+    }
 }
 
 //Eventos
