@@ -4,6 +4,30 @@
     font-size: xx-large;
 }
 
+article {
+    display: flex;
+    align-items: center;
+}
+
+article div{
+    padding: 2.5%;
+    width: 10%;
+    display: flex;
+    justify-content: left;
+    margin-left: auto;
+    background-color: rgba(138, 138, 138, 0.9);
+    border-radius: 10px;
+}
+
+article div img{
+    margin-right: 5%;
+    width: 25%;
+}
+article div p {
+    display: flex;
+    align-items: center;
+}
+
 body {
     background-image: url("../images/background.jpg");
     background-repeat: no-repeat;
@@ -35,7 +59,7 @@ header form select {
 }
 
 table {
-    margin: 0 auto 3% auto;
+    margin: 0 auto 5% auto;
     border: 1px solid black;
     background-color: black;
 }
@@ -43,6 +67,10 @@ table {
 table tr td {
     width: 50px;
     height: 50px;
+    text-align: center;
+}
+
+h1 {
     text-align: center;
 }
 
@@ -72,4 +100,20 @@ table tr td {
 .red {
     color: rgb(255, 0, 0);
     background-color: rgba(255, 0, 0, 0.5);
+}
+
+.bomb {
+    background-image: url("../images/bomb-solid.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.flag {
+    background-image: url("../images/flag-solid.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.invisible {
+    display: none;
 }
