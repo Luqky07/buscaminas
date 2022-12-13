@@ -9,21 +9,27 @@ article {
     align-items: center;
 }
 
-article div{
+article div {
     padding: 2.5%;
     width: 10%;
-    display: flex;
-    justify-content: left;
     margin-left: auto;
     background-color: rgba(138, 138, 138, 0.9);
     border-radius: 10px;
 }
 
-article div img{
+article div section {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    margin: 0 0 10% 0;
+}
+
+article div section img {
     margin-right: 5%;
     width: 25%;
 }
-article div p {
+
+article div section p {
     display: flex;
     align-items: center;
 }
@@ -74,6 +80,18 @@ h1 {
     text-align: center;
 }
 
+.footer {
+    text-align: center;
+}
+
+.footer button {
+    background-color: rgba(138, 138, 138, 0.9);
+    border: none;
+    border-radius: 10px;
+    padding: 1%;
+    margin: 0 0 3% 0;
+}
+
 .casilla {
     background-color: rgb(128, 128, 128);
 }
@@ -116,4 +134,61 @@ h1 {
 
 .invisible {
     display: none;
+}
+
+.msg {
+    position: absolute;
+    z-index: 100;
+    background-color: rgb(138, 138, 138);
+    border-radius: 10px;
+    top: 25%;
+    margin-left: 20%;
+    padding: 5%;
+    width: 50%;
+    text-align: center;
+}
+
+.msg form {
+    text-align: center;
+}
+
+.msg form * {
+    margin-top: 5%;
+}
+
+.msg button {
+    z-index: 101;
+    position: absolute;
+    top: 5%;
+    right: 2%;
+    background-color: black;
+    color: rgb(255, 255, 255);
+    width: 4%;
+    border-radius: 200%;
+}
+
+.marcador {
+    position: absolute;
+    z-index: 100;
+    background-color: rgb(138, 138, 138);
+    border-radius: 10px;
+    top: 25%;
+    margin-left: 20%;
+    padding: 5%;
+    width: 50%;
+}
+
+.marcador ol {
+    margin-left: 25%;
+}
+
+.marcador button {
+    z-index: 101;
+    position: absolute;
+    top: 5%;
+    right: 2%;
+    background-color: black;
+    color: rgb(255, 255, 255);
+    width: 4%;
+    border-radius: 200%;
 }
