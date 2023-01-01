@@ -11,41 +11,58 @@ const marcador = document.getElementById("marcador");
 const bMarcdor = document.getElementById("bMarcador");
 const footer = document.getElementById("footer");
 
+
+//Variables globlales
 let db;
 let firstOpt = true;
 let bombas = [];
 let casillasRevisadas = [];
-let globalSize = 0;
+let size = 0;
 let banderas = 0;
 let intervalo;
 let reloj = {
     segundos: 0,
-    minutos: 0,
-    horas: 0
+    minutos: 0
 }
 let dificultad;
 
 //Funciones
-function generarCampo(size, bombs) {
-    campo.innerHTML = "";
-    let tablero = "";
-    for (let i = 0; i < size; i++) {
-        tablero += "<tr>\n"
-        for (let j = 0; j < size; j++) {
-            tablero += "<td id='" + i + "-" + j + "' class='casilla'></td>\n"
+
+/*
+    Usando la variable global "size",que es un array, para crear un tablero, primero crear las filas con un
+    bucle for hasta llegar al primer elemento de "size", dentro de este bucle declaro un elemento "tr" y para 
+    las columnas otro bucle for hasta llegar al segundo elemento de "size", dentro de este bucle declaro un
+    elemento "td" al que le modifico la "id" en función de las variables del bucle for y le doy la clase 
+    "casilla", por último en este bloque al elemento "tr" le añado el nuevo elemento "td" con .appendChild(),
+    al terminar de recorrer las columnas a "campo", que es una constante que contiene el elemento "table" donde 
+    quiero generar el tablero, y le añado el elemento "td", una vez terminado de crear el tablero llamado a 2 
+    funciones más, una para generar las bombas y otrar para crear los eventos de las casillas.
+*/
+function generarCampo(bombs) {
+    for (let i = 0; i < size[0]; i++) {
+        let fila = document.createElement("tr");
+        for (let j = 0; j < size[1]; j++) {
+            let columna = document.createElement("td");
+            columna.id = i + "-" + j;
+            columna.className = "casilla";
+            fila.appendChild(columna);
         }
-        tablero += "</tr>\n";
+        campo.appendChild(fila);
     }
-    campo.innerHTML = tablero;
-    globalSize = size;
-    generarBombas(size, bombs);
-    events(size);
-    console.log(bombas);
+    generarBombas(bombs);
+    events();
 }
 
-function events(size) {
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
+/*
+    Esta función sirve para iniciar los eventos que permiten interactuar con las casillas, haciendo uso de la 
+    variable global "size" hago un doble bucle for que primero recorre las filas con el primer elemento de "size" 
+    y luego recorre las columnas con el segundo elemento de "size" creo un elemento de html haciendo uso de los 
+    contadores  de ambos for que coincide con las id de las casillas de la tabla y creo dos eventos por cada 
+    casilla, un evento para detectar el click izquierdo y otro para detectar el click derecho.
+*/
+function events() {
+    for (let i = 0; i < size[0]; i++) {
+        for (let j = 0; j < size[1]; j++) {
             let id = document.getElementById(i + "-" + j);
             id.addEventListener("click", comprobarCasilla);
             id.addEventListener("contextmenu", ponerBandera);
@@ -53,21 +70,33 @@ function events(size) {
     }
 }
 
+/*
+    Esta función sirve para modificar un objeto declarado global que contien el tiempo que ha pasado desde
+    que se ha hecho el primer click para poder ejecutarse al hacer el primer click se activa un intervalo que
+    hace que la función se ejecute cada segundo, primero suma 1 segundo y comprueba si el valor es 60, en caso
+    de que sea true reinicia los segundos a 0 y suma 1 a minutos. Para mejorar la vista con dos condiciones
+    hago que si los valores de segundos y minutos son menor de 10 añade un 0 para tener siempre un formato de
+    dos digitos. Por último esa función crea un text node y reemplaza el que hay en el html por el que ha creado.
+*/
 function cronometro() {
     if (reloj.segundos++ == 60) {
         reloj.segundos = 0;
-        if (reloj.minutos++ == 60) {
-            reloj.minutos = 0;
-            reloj.horas++;
-        }
+        reloj.minutos++;
     }
-    if (reloj.segundos < 10 != "00") reloj.segundos = "0" + Number(reloj.segundos);
-    if (reloj.minutos < 10 != "00") reloj.minutos = "0" + Number(reloj.minutos);
-    if (reloj.horas < 10 != "00") reloj.horas = "0" + Number(reloj.horas);
-    if (reloj.horas != 0) time.innerHTML = "Tiempo " + reloj.horas + ":" + reloj.minutos + ":" + reloj.segundos;
-    else time.innerHTML = "Tiempo " + reloj.minutos + ":" + reloj.segundos;
+    if (reloj.segundos < 10) reloj.segundos = "0" + Number(reloj.segundos);
+    if (reloj.minutos < 10) reloj.minutos = "0" + Number(reloj.minutos);
+    let txt = document.createTextNode("Tiempo " + reloj.minutos + ":" + reloj.segundos)
+    time.replaceChild(txt, time.firstChild);
 }
 
+/*
+    Es la función que se ejecuta al hacer click derecho, trabajando con el evento que envia contextMenu podemos
+    identificar el elemento que ha ejecutado el evento y acceder a su id, en caso de que no tenga bandera y  
+    si hay banderas disponibles resta 1 a 1 variable global que es el número de banderas que depende de la 
+    cantidad de bombas y ademas añade una clase al elemento, que se relaciona con css, en caso de que ya tenga 
+    banderas, suma 1 al contador de banderas y le quita clase al elemento de html. Por último crea un textNode 
+    que contiene el número de banderas disponibles e intercambia el hijo que tenía por el que ha creado nuevo.
+*/ 
 function ponerBandera(e) {
     let id = document.getElementById(e.target.id);
     if (id.classList[1] == "flag") {
@@ -79,87 +108,126 @@ function ponerBandera(e) {
             banderas--;
         }
     }
-    cBanderas.innerHTML = banderas;
+    let banderasTxt = document.createTextNode(banderas);
+    cBanderas.replaceChild(banderasTxt, cBanderas.firstChild);
 }
 
+/*
+    Esta es la función que se ejecuta cuando hacemos click izquierdo en una casilla, al igual que las banderas
+    recibe el valor de la id mediante el evento que se ejecuta, y siempre que la casilla no contenga la clase 
+    flag que representa que hay bandera lo primero que hace es modificar la clase de la casilla, además en
+    caso de que esa casilla este contenida dentro del array global bombas que contiene las coordenas de todas
+    las bombas puede o en caso de que sea el primer intento cambiar la bomba que habia colocado por otra 
+    y llamar a la función que comprueba cuantas bombas hay alrededor o en caso de no sea el primer click recorre
+    todo el array de bombas y muestra donde estaban colocadas, además llama a la función que termina el juego.
+*/
 function comprobarCasilla(e) {
-    if (firstOpt == true) {
-        intervalo = setInterval(cronometro, 1000);
-        firstOpt = false;
-    }
     let id = document.getElementById(e.target.id);
     if (!id.classList.contains("flag")) {
         id.className = "vacio";
         if (bombas.includes(id.id)) {
-            for (let b = 0; b < bombas.length; b++) {
-                let bomba = document.getElementById(bombas[b])
-                bomba.className = "vacio bomb";
+            if (firstOpt == true) {
+                for (i in bombas) {
+                    if (bombas[i] == id.id) {
+                        bombas.splice(i, 1);
+                    }
+                }
+                generarBombas(1);
+                comprobarAlrededor(id);
             }
-            generarFin("perdedor");
+            else {
+                for (b of bombas) {
+                    let bomba = document.getElementById(b)
+                    bomba.className += " bomb";
+                }
+                generarFin("perdedor");
+            }
         } else {
-            comprobarAlrededor(id.id, globalSize);
+            comprobarAlrededor(id);
         }
+    }
+    if (firstOpt == true) {
+        intervalo = setInterval(cronometro, 1000);
+        firstOpt = false;
     }
 }
 
-function comprobarAlrededor(id, size) {
-    let idCasilla = document.getElementById(id);
-    if (!idCasilla.classList.contains("flag")) {
-        casillasRevisadas.push(id);
-        let cords = id.split("-");
+/*
+    Esta función permite comprobar el número de bombas que hay en el 3x3 alrededor de la casilla objetivo, además
+    para asegurar el fin del juego cuando comprueba una casilla guarda en un array declaro global que contiene
+    todas las casillas revisadas. 
+*/
+function comprobarAlrededor(element) {
+    if (!element.classList.contains("flag")) {
+        casillasRevisadas.push(element.id);
+        let cords = element.id.split("-");
         let cont = 0;
         for (let i = 1; i >= -1; i--) {
             for (let j = 1; j >= -1; j--) {
                 let x = cords[0] - i;
                 let y = cords[1] - j;
-                if (x >= 0 && x < size && y >= 0 || y < size) {
-                    if (bombas.includes((x + "-" + y))) {
-                        cont++;
-                    }
+                if (x >= 0 && x < size[1] && y >= 0 || y < size[0]) {
+                    if (bombas.includes((x + "-" + y))) cont++;
                 }
             }
         }
         if (cont > 0) {
-            document.getElementById(id).innerHTML = cont;
+            let cantBombas = document.createTextNode(cont);
+            console.log(cont);
+            element.appendChild(cantBombas);
             switch (cont) {
                 case 1:
-                    document.getElementById(id).className = "green";
+                    element.className = "green";
                     break;
                 case 2:
-                    document.getElementById(id).className = "yellow";
+                    element.className = "yellow";
                     break;
                 case 3:
-                    document.getElementById(id).className = "orange";
+                    element.className = "orange";
                     break;
                 default:
-                    document.getElementById(id).className = "red";
+                    element.className = "red";
             }
         }
         if (cont == 0) {
-            document.getElementById(id).className = "vacio";
-            let newCords = (Number(cords[0]) - 1) + "-" + cords[1];
-            if ((Number(cords[0]) - 1) >= 0 && !casillasRevisadas.includes(newCords)) comprobarAlrededor(newCords, size);
+            element.className = "vacio";
+            let newElement = document.getElementById((Number(cords[0]) - 1) + "-" + cords[1]);
+            if ((Number(cords[0]) - 1) >= 0 && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
 
-            newCords = (Number(cords[0]) + 1) + "-" + cords[1];
-            if ((Number(cords[0]) + 1) < size && !casillasRevisadas.includes(newCords)) comprobarAlrededor(newCords, size);
+            newElement = document.getElementById(cords[0] + "-" + (Number(cords[1]) - 1));
+            if ((Number(cords[1]) - 1) >= 0 && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
 
-            newCords = cords[0] + "-" + (Number(cords[1]) - 1);
-            if ((Number(cords[1]) - 1) >= 0 && !casillasRevisadas.includes(newCords)) comprobarAlrededor(newCords, size);
+            newElement = document.getElementById(cords[0] + "-" + (Number(cords[1]) + 1));
+            if ((Number(cords[1]) + 1) < size[0] && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
 
-            newCords = cords[0] + "-" + (Number(cords[1]) + 1);
-            if ((Number(cords[1]) + 1) < size && !casillasRevisadas.includes(newCords)) comprobarAlrededor(newCords, size);
+            newElement = document.getElementById((Number(cords[0]) + 1) + "-" + cords[1]);
+            if ((Number(cords[0]) + 1) < size[0] && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
+
+            newElement = document.getElementById((Number(cords[0]) - 1) + "-" + (Number(cords[1]) - 1));
+            if ((Number(cords[0]) - 1) >= 0 && (Number(cords[1]) - 1) >= 0 && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
+
+            newElement = document.getElementById((Number(cords[0]) - 1) + "-" + (Number(cords[1]) + 1));
+            if ((Number(cords[0]) - 1) >= 0 && (Number(cords[1]) + 1) < size[1] && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
+
+            newElement = document.getElementById((Number(cords[0]) + 1) + "-" + (Number(cords[1]) - 1));
+            if ((Number(cords[0]) + 1) < size[0] && (Number(cords[1]) - 1) >= 0 && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
+
+            newElement = document.getElementById((Number(cords[0]) + 1) + "-" + (Number(cords[1]) + 1));
+            if ((Number(cords[0]) + 1) < size[0] && (Number(cords[1]) + 1) < size[1] && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
         }
-        if (casillasRevisadas.length == (size * size) - bombas.length) {
+        if (casillasRevisadas.length == (size[0] * size[1]) - bombas.length) {
             console.log(casillasRevisadas);
             generarFin("ganador");
         }
+        element.removeEventListener("click", comprobarCasilla);
+        element.removeEventListener("contextmenu", ponerBandera);
     }
 }
 
 function generarFin(estado) {
     clearInterval(intervalo);
-    for (let fila = 0; fila < globalSize; fila++) {
-        for (let columna = 0; columna < globalSize; columna++) {
+    for (let fila = 0; fila < size[0]; fila++) {
+        for (let columna = 0; columna < size[1]; columna++) {
             let id = document.getElementById(columna + "-" + fila);
             id.removeEventListener("click", comprobarCasilla);
             id.removeEventListener("contextmenu", ponerBandera);
@@ -167,17 +235,16 @@ function generarFin(estado) {
     }
     if (estado == "ganador") {
         win.className = "msg";
-        if (reloj.horas != 0) win.children[1].innerHTML = time.innerHTML;
-        else win.children[1].innerHTML = time.innerHTML;
+        win.children[1].innerHTML = time.innerHTML;
 
     }
     else loose.className = "msg";
 }
-function generarBombas(size, bombs) {
+function generarBombas(bombs) {
     let contBomb = 0;
     do {
-        let fila = Math.floor(Math.random() * size);
-        let columna = Math.floor(Math.random() * size);
+        let fila = Math.floor(Math.random() * size[0]);
+        let columna = Math.floor(Math.random() * size[1]);
         if (!bombas.includes(fila + "-" + columna)) {
             bombas.push(fila + "-" + columna);
             contBomb++;
@@ -186,13 +253,19 @@ function generarBombas(size, bombs) {
 }
 
 function reiniciarJuego() {
+    while (campo.firstChild) {
+        campo.removeChild(campo.firstChild);
+    }
     losse.className = "invisible"
     win.className = "invisible";
     firstOpt = true;
     reloj.segundos = "00";
     reloj.minutos = "00";
-    reloj.horas = "00";
-    time.innerHTML = "Tiempo " + reloj.minutos + ":" + reloj.segundos;
+    while (time.firstChild) {
+        time.removeChild(time.firstChild);
+    }
+    let txt = document.createTextNode("Tiempo " + reloj.minutos + ":" + reloj.segundos)
+    time.appendChild(txt);
     clearInterval(intervalo);
     info.removeAttribute("class");
     bombas = [];
@@ -238,12 +311,14 @@ if (indexedDB) {
             let data = {
                 name: e.target.name.value,
                 mode: dificultad,
-                time: reloj.horas + ":" + reloj.minutos + ":" + reloj.segundos
+                time: reloj.minutos + ":" + reloj.segundos
             }
             addData(data);
             e.target.name.value = "";
             win.className = "invisible";
-        });
+            return false;
+        },
+            false);
     }
     request.onerror = (error) => {
         console.log("Error");
@@ -257,11 +332,13 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
     dificultad = e.target.size.value;
     let array = dificultad.split(" ");
-    let size = array[0].split("x");
+    size = array[0].split("x");
     banderas = array[1];
     cBanderas.innerHTML = banderas;
-    generarCampo(size[0], array[1]);
-})
+    generarCampo(array[1]);
+    return false;
+},
+    false)
 
 losse.children[0].addEventListener("click", () => { losse.className = "invisible" })
 marcador.children[0].addEventListener("click", () => { marcador.className = "invisible" })
