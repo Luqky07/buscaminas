@@ -96,7 +96,7 @@ function cronometro() {
     cantidad de bombas y ademas añade una clase al elemento, que se relaciona con css, en caso de que ya tenga 
     banderas, suma 1 al contador de banderas y le quita clase al elemento de html. Por último crea un textNode 
     que contiene el número de banderas disponibles e intercambia el hijo que tenía por el que ha creado nuevo.
-*/ 
+*/
 function ponerBandera(e) {
     let id = document.getElementById(e.target.id);
     if (id.classList[1] == "flag") {
@@ -153,9 +153,15 @@ function comprobarCasilla(e) {
 }
 
 /*
-    Esta función permite comprobar el número de bombas que hay en el 3x3 alrededor de la casilla objetivo, además
-    para asegurar el fin del juego cuando comprueba una casilla guarda en un array declaro global que contiene
-    todas las casillas revisadas. 
+    Esta función permite comprobar el número de bombas que hay en el 3x3 alrededor de la casilla objetivo.
+    Al llamar a la función comprobamos que la casilla no sea una bandera, también guardamos la casilla en un 
+    array que contiene todas las casillas revisadas. En caso de encontrar bombas con un contador almaceno el 
+    número de bombas y a la casilla le asigno una clase en función del número de bombas que hay alredor y tambíen
+    imprimo en esa casilla el número. En caso de que no encuentra bombas alrededor vuelve a llamar a la función 
+    desde las casillas que hay alrededor recursivamente en el caso de que esas casillas estén dentro del area del 
+    tablero y no se encuentren en el array de casillas revisadas. Empleando el número de casillas que se han 
+    revisado comprueba si se han revisado todas las casillas que no sean bombas y si es así termina el juego.
+    Por último desactiva los eventos de click y contextualmenu para que esa casilla no se pueda pulsar.
 */
 function comprobarAlrededor(element) {
     if (!element.classList.contains("flag")) {
@@ -216,14 +222,18 @@ function comprobarAlrededor(element) {
             if ((Number(cords[0]) + 1) < size[0] && (Number(cords[1]) + 1) < size[1] && !casillasRevisadas.includes(newElement.id)) comprobarAlrededor(newElement);
         }
         if (casillasRevisadas.length == (size[0] * size[1]) - bombas.length) {
-            console.log(casillasRevisadas);
             generarFin("ganador");
         }
         element.removeEventListener("click", comprobarCasilla);
         element.removeEventListener("contextmenu", ponerBandera);
     }
 }
-
+/*
+    Está función se llama en caso de que se termine la partida, limpia el intervalo para que el tiempo
+    deje de contar y recorre todas las casillas desactivando los eventos de click y contextmenu para que no se
+    puedan pulsar las casillas una vez terminada la partida. Dependiendo de como se ha terminado la partida, si se
+    han marcado todas las casillas que no son bombas o se ha pulsado una bomba se mostrará un mensaje u otro.
+*/
 function generarFin(estado) {
     clearInterval(intervalo);
     for (let fila = 0; fila < size[0]; fila++) {
@@ -237,9 +247,14 @@ function generarFin(estado) {
         win.className = "msg";
         win.children[1].innerHTML = time.innerHTML;
 
-    }
-    else loose.className = "msg";
+    } else loose.className = "msg";
 }
+
+/*
+    Recibe el número de bombas que tiene que imprimir. Con un bucle do while() coloca las bombas en sitios 
+    aleatorios dentro del tablero, y comprueba que en la casilla que quiere poner la bomba no haya una bomba ya
+    guardando las bombas que coloca en un array y aumenta el contador. 
+*/
 function generarBombas(bombs) {
     let contBomb = 0;
     do {
@@ -252,6 +267,12 @@ function generarBombas(bombs) {
     } while (contBomb < bombs)
 }
 
+/*
+    Reinicio todas las variables para poder iniciar una nueva partida, borro el tablero, escondo los mensajes,
+    vuelvo a activar que el siguiente click será el primero, reinicio el temporizador y limpio le intervalo.
+    Activo la ventana con la información del tablero y por último reinicio los arrays que contienen las casillas
+    revisadas y la posición de las bombas colodas.
+*/
 function reiniciarJuego() {
     while (campo.firstChild) {
         campo.removeChild(campo.firstChild);
@@ -272,12 +293,14 @@ function reiniciarJuego() {
     casillasRevisadas = [];
 }
 
+//Esta función permite añadir datos a indexedDB
 function addData(data) {
     let transaction = db.transaction([dificultad], "readwrite");
     let objectStore = transaction.objectStore(dificultad);
     let request = objectStore.add(data);
 }
 
+//Esta función recoge todos los datos de indexedDB dependiendo de la dificultad y los muestra en pantalla.
 function readData() {
     let transaction = db.transaction([dificultad], "readonly");
     let objectStore = transaction.objectStore(dificultad);
@@ -294,6 +317,7 @@ function readData() {
     marcador.className = "marcador";
 }
 
+//Crea la base de datos o entra en ella si ya la ha creado
 if (indexedDB) {
     let request = indexedDB.open("playerList", 1)
     request.onupgradeneeded = () => {
