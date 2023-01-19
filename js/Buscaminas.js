@@ -350,6 +350,8 @@ if (indexedDB) {
 }
 
 //Eventos
+
+//Este evento se ejecuta al hacer un submit en el formulario para iniciar una partida
 form.addEventListener("submit", (e) => {
     reiniciarJuego();
     footer.className = "footer";
@@ -364,7 +366,9 @@ form.addEventListener("submit", (e) => {
 },
     false)
 
+//Permite cerrar las ventanas del mensaje de derrota y de la tabla de partidas guardadas
 losse.children[0].addEventListener("click", () => { losse.className = "invisible" })
 marcador.children[0].addEventListener("click", () => { marcador.className = "invisible" })
 
+//Permite mostrar los resultados de partidas anteriores terminadas
 bMarcdor.addEventListener("click", readData);
