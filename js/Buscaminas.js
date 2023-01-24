@@ -331,7 +331,8 @@ if (indexedDB) {
     request.onsuccess = () => {
         db = request.result
         console.log("Database abierta");
-        win.children[2].addEventListener("submit", (e) => {
+        win.children[3].addEventListener("submit", (e) => {
+            e.preventDefault();
             let data = {
                 name: e.target.name.value,
                 mode: dificultad,
@@ -340,9 +341,7 @@ if (indexedDB) {
             addData(data);
             e.target.name.value = "";
             win.className = "invisible";
-            return false;
-        },
-            false);
+        });
     }
     request.onerror = (error) => {
         console.log("Error");
