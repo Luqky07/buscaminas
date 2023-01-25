@@ -1,27 +1,33 @@
 export class Casilla {
-    pos;
-    bomb = false;
-    check = false;
-    bandera = false;
-    constructor(pos) {
-        this.pos = pos;
+    bomb;
+    check;
+    bandera;
+    constructor() {
+        this.bomb = false;
+        this.check = false;
+        this.bandera = false;
     }
-    getPos() {
-        return this.pos;
+    constructor(bomb, check, bandera) {
+        this.bomb = bomb;
+        this.check = check;
+        this.bandera = bandera;
     }
     getBomb() {
         return this.bomb;
     }
-    setBomb(estado) {
-        this.bomb = estado;
+    setBomb() {
+        this.bomb = !this.bomb;
     }
     getCheck() {
-        this.check = check;
+        return this.check = check;
     }
     setCheck() {
         this.check = true;
     }
-    setBandera(estado) {
-        this.bandera = estado;
+    getBandera() {
+        return this.bandera;
+    }
+    setBandera() {
+        this.bandera = this.bandera;
     }
 }
