@@ -8,7 +8,7 @@ export class Tablero {
     de bombas. Mediante un doble bucle recorriendo el tamaño recibido se crea una matriz que contiene 
     objetos Casilla. Usando un contador y un bucle do while se colocaran bombas en casillas aleatorias
     comprobando primero que en esa casilla no hubiese una bomba ya, solo en caso de ser así se colocará 
-    una bomba y aumentará el contador
+    una bomba y aumentará el contador.
     */
     constructor(size, bombs) {
         let tab = []
@@ -31,6 +31,10 @@ export class Tablero {
         } while (contBomb < bombs)
     }
 
+    getCasilla(cords) {
+        return this.casillas[cords[0]][cords[1]];
+    }
+
     //Devuelve un array con las coordenadas y las filas de una casilla aleatoria
     casillaRandom() {
         let row = Math.floor(Math.random() * this.casillas.length);
@@ -40,8 +44,7 @@ export class Tablero {
     }
 
     /*
-    Recibe un array con las coordenadas y en caso de que haya bomba la mueve a otra 
-    posición.
+    Recibe un array con las coordenadas y en caso de que haya bomba la mueve a otra posición.
     */
     cambiarBomb(oldPos) {
         if (this.casillas[oldPos[0]][oldPos[1]].getBomb()) {
@@ -50,7 +53,9 @@ export class Tablero {
             this.casillas[casilla[0]][casilla[1]].setBomb(true);
         }
     }
-
+    /*
+    En caso de que la Casilla sobre la que se quiere poner la bandera ya tenga una la bandera se quitará
+    */
     bandera(e) {
         let id = document.getElementById(e.target.id);
         if (id.classList[1] == "flag") {
@@ -64,34 +69,5 @@ export class Tablero {
         }
         let banderasTxt = document.createTextNode(banderas);
         cBanderas.replaceChild(banderasTxt, cBanderas.firstChild);
-    }
-
-    /*
-    Pinta el tablero dentro de la etiqueta con id = 'campo' y una vez creada la tabla
-    genera los eventos de cada casilla
-    */
-    printTablero() {
-        let campo = document.getElementById("campo");
-        for (let row = 0; row < this.casillas.length; row++) {
-            let fila = document.createElement("tr");
-            for (let col = 0; col < this.casillas[0].length; col++) {
-                let columna = document.createElement("td");
-                columna.id = row + "-" + col;
-                columna.className = "casilla";
-                if (this.casillas[row][col].getCheck()) columna.className = "vacio";
-                else if (this.casilla[row][col].getBandera()) columna.className += " flag";
-                fila.appendChild(columna);
-            }
-            campo.appendChild(fila);
-        }
-        for (let row = 0; row < this.casillas.length; row++) {
-            for (let col = 0; col < this.casillas[0].length; col++) {
-                let id = document.getElementById(row + "-" + col);
-                if (!this.casillas[row][col].getCheck()) {
-                    id.addEventListener("click", comprobarCasilla);
-                    id.addEventListener("contextmenu", this.bandera);
-                }
-            }
-        }
     }
 }
