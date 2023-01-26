@@ -1,7 +1,7 @@
-export class Tiempo{
-    minutos;
-    segundos;
-    intervalo;
+export default class Tiempo{
+    #minutos;
+    #segundos;
+    #intervalo;
     constructor() {
         this.minutos = 0;
         this.segundos = 0;
@@ -12,7 +12,7 @@ export class Tiempo{
     stopTime() {
         clearInterval(this.intervalo);
     }
-    aumentarTiempo() {
+    #aumentarTiempo() {
         if (this.segundos++ == 60) {
             this.segundos = 0;
             this.minutos++;

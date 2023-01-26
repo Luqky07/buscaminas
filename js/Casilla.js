@@ -1,7 +1,7 @@
-export class Casilla {
-    bomb;
-    check;
-    bandera;
+export default class Casilla {
+    #bomb;
+    #check;
+    #bandera;
     constructor() {
         this.bomb = false;
         this.check = false;

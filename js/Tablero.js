@@ -1,7 +1,7 @@
-import { Casilla } from "./Casilla.js";
-export class Tablero {
-    casillas;   //Array con la información de las casillas
-    bombs;  //Cantidad de bombas
+import Casilla from "./Casilla.js";
+export default class Tablero {
+    #casillas;   //Array con la información de las casillas
+    #bombs;  //Cantidad de bombas
 
     /*
     El constructor de esta clase recibe el tamaño que tendrá el tablero en forma de array y el número
@@ -36,7 +36,7 @@ export class Tablero {
     }
 
     //Devuelve un array con las coordenadas y las filas de una casilla aleatoria
-    casillaRandom() {
+    #casillaRandom() {
         let row = Math.floor(Math.random() * this.casillas.length);
         let col = Math.floor(Math.random() * this.casillas[0].length);
         return [row, col];

@@ -1,15 +1,15 @@
-import { Tablero } from "./Tablero";
-import { Tiempo } from "./Tiempo";
-export class Partida{
-    difcult;
-    tablero;
-    tiempo;
+import Tablero from "./Tablero";
+import Tiempo from "./Tiempo";
+export default class Partida{
+    #difcult;
+    #tablero;
+    #tiempo;
     constructor(dificult) {
         this.difcult = dificult;
         size = this.dificult.split(" ")[0];
         bombas = this.dificult.split(" ")[1];
         this.tablero = new Tablero(size.split("x"));
-        this.tiempo = new Tiempo;
+        this.tiempo = new Tiempo();
     }
 
     /*
