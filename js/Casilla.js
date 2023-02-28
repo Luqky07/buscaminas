@@ -1,16 +1,14 @@
-export default class Casilla {
+export class Casilla {
     #bomb;
     #check;
     #bandera;
-    constructor() {
-        this.bomb = false;
-        this.check = false;
-        this.bandera = false;
-    }
     constructor(bomb, check, bandera) {
         this.bomb = bomb;
         this.check = check;
         this.bandera = bandera;
+    }
+    casillaVacia() {
+        return new Casilla(false, false, false);
     }
     getBomb() {
         return this.bomb;
@@ -19,7 +17,7 @@ export default class Casilla {
         this.bomb = !this.bomb;
     }
     getCheck() {
-        return this.check = check;
+        return this.check;
     }
     setCheck() {
         this.check = true;
@@ -28,6 +26,6 @@ export default class Casilla {
         return this.bandera;
     }
     setBandera() {
-        this.bandera = this.bandera;
+        this.bandera = !this.bandera;
     }
 }

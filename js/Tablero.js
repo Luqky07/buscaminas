@@ -1,5 +1,5 @@
-import Casilla from "./Casilla.js";
-export default class Tablero {
+import { Casilla } from "./Casilla.js";
+export class Tablero {
     #casillas;   //Array con la información de las casillas
     #bombs;  //Cantidad de bombas
 
@@ -35,8 +35,12 @@ export default class Tablero {
         return this.casillas[cords[0]][cords[1]];
     }
 
+    getTableroLength() {
+        return [this.casillas.length, this.casillas[0].length];
+    }
+
     //Devuelve un array con las coordenadas y las filas de una casilla aleatoria
-    #casillaRandom() {
+    casillaRandom() {
         let row = Math.floor(Math.random() * this.casillas.length);
         let col = Math.floor(Math.random() * this.casillas[0].length);
         return [row, col];
@@ -53,21 +57,21 @@ export default class Tablero {
             this.casillas[casilla[0]][casilla[1]].setBomb(true);
         }
     }
-    /*
-    En caso de que la Casilla sobre la que se quiere poner la bandera ya tenga una la bandera se quitará
-    */
-    bandera(e) {
-        let id = document.getElementById(e.target.id);
-        if (id.classList[1] == "flag") {
-            id.className = id.classList[0];
-            banderas++;
-        } else {
-            if (banderas > 0) {
-                id.className += " flag";
-                banderas--;
+
+    comprobarAlrededor(cords) {
+        console.log(cords);
+        if (!this.casillas[cords[0]][cords[1]].getBandera()) {
+            let cont = 0;
+            for (let row = 1; row >= -1; row--) {
+                for (let col = 1; col >= -1; col--) {
+                    let x = cords[0] - row;
+                    let y = cords[1] - col;
+                    if (x >= 0 && x < size[1] && y >= 0 || y < size[0]) {
+                        if (this.casillas[x][y].getBomb()) cont++;
+                    }
+                }
             }
+            return cont;
         }
-        let banderasTxt = document.createTextNode(banderas);
-        cBanderas.replaceChild(banderasTxt, cBanderas.firstChild);
     }
 }
