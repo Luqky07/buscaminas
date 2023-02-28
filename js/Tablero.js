@@ -15,8 +15,8 @@ export class Tablero {
         for (let row = 0; row < size[0]; row++) {
             let arrayRow = [];
             for (let col = 0; col < size[1]; col++) {
-                let pos = row + "-" + col;
-                arrayRow.push(new Casilla(pos));
+                let casillaVacia = new Casilla();
+                arrayRow.push(casillaVacia.casillaVacia());
             }
             tab.push(arrayRow);
         }
@@ -60,14 +60,19 @@ export class Tablero {
 
     comprobarAlrededor(cords) {
         console.log(cords);
-        if (!this.casillas[cords[0]][cords[1]].getBandera()) {
+        let casilla = this.casillas[cords[0]][cords[1]]
+        if (!casilla.getBandera()) {
+            casilla.setCheck();
             let cont = 0;
             for (let row = 1; row >= -1; row--) {
                 for (let col = 1; col >= -1; col--) {
                     let x = cords[0] - row;
                     let y = cords[1] - col;
-                    if (x >= 0 && x < size[1] && y >= 0 || y < size[0]) {
+                    try{
+                        console.log(this.casillas[x][y])
                         if (this.casillas[x][y].getBomb()) cont++;
+                    } catch(e) {
+                        
                     }
                 }
             }

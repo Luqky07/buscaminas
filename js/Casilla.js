@@ -2,10 +2,12 @@ export class Casilla {
     #bomb;
     #check;
     #bandera;
-    constructor(bomb, check, bandera) {
+    #cantBomb;
+    constructor(bomb, check, bandera, bomb) {
         this.bomb = bomb;
         this.check = check;
         this.bandera = bandera;
+        this.cantBomb
     }
     casillaVacia() {
         return new Casilla(false, false, false);

@@ -40,41 +40,52 @@ export class Partida {
         for (let row = 0; row < size[0]; row++) {
             for (let col = 0; col < size[1]; col++) {
                 document.getElementById(row + "-" + col).addEventListener("click", (event) => {
-                    let cont = this.tablero.comprobarAlrededor((event.target.id).split("-"));
-                    this.printTablero();
-                    if (cont > 0) {
-                        let casilla = document.addEventListener(row + "-" + col);
-                        let cantBombas = document.createTextNode(cont);
-                        console.log(cont);
-                        casilla.appendChild(cantBombas);
-                        switch (cont) {
-                            case 1:
-                                casilla.className = "green";
-                                break;
-                            case 2:
-                                casilla.className = "yellow";
-                                break;
-                            case 3:
-                                casilla.className = "orange";
-                                break;
-                            default:
-                                casilla.className = "red";
-                        }
-                    } else {
-                        for(let newRow = -1; newRow == 1 ; newRow++) {
-                            for(let newCol = -1; newCol == 1; newCol++) {
-                                if(this.tablero.getCasilla([x,y]).getBomb()){
-                                    
-                                }
-                            }
-                        }
-                    }
+                    let cords = (event.target.id).split("-");
+                    this.eventoComprobarAlrededor(cords);
                 });
                 document.getElementById(row + "-" + col).addEventListener("contextmenu", (event) => {
-                    let cords = (event.target.id).split("-")
+                    let cords = (event.target.id).split("-");
                     this.tablero.getCasilla(cords).setBandera();
                     this.printTablero();
                 });
+            }
+        }
+    }
+
+    eventoComprobarAlrededor(cords) {
+        let cont = this.tablero.comprobarAlrededor(cords);
+        this.printTablero();
+        if (cont > 0) {
+            let casilla = document.getElementById(cords[0] + "-" + cords[1]);
+            let cantBombas = document.createTextNode(cont);
+            console.log(cont);
+            casilla.appendChild(cantBombas);
+            switch (cont) {
+                case 1:
+                    casilla.className = "green";
+                    break;
+                case 2:
+                    casilla.className = "yellow";
+                    break;
+                case 3:
+                    casilla.className = "orange";
+                    break;
+                default:
+                    casilla.className = "red";
+            }
+        } else {
+            console.log(cont);
+            for (let newRow = -1; newRow == 1; newRow++) {
+                for (let newCol = -1; newCol == 1; newCol++) {
+                    if (!this.tablero.getCasilla([cords[0], cords[1]]).getCheck()) {
+                        try {
+                            let newCords = [(cords[0] + newRow), (cords[1] + newCol)];
+                            this.eventoComprobarAlrededor(newCords);
+                        } catch (e) {
+                            console.log("Array fuera de limites");
+                        }
+                    }
+                }
             }
         }
     }
