@@ -3,14 +3,14 @@ export class Casilla {
     #check;
     #bandera;
     #cantBomb;
-    constructor(bomb, check, bandera, bomb) {
+    constructor(bomb, check, bandera, cantBomb) {
         this.bomb = bomb;
         this.check = check;
         this.bandera = bandera;
-        this.cantBomb
+        this.cantBomb = cantBomb;
     }
     casillaVacia() {
-        return new Casilla(false, false, false);
+        return new Casilla(false, false, false, null);
     }
     getBomb() {
         return this.bomb;
@@ -29,5 +29,11 @@ export class Casilla {
     }
     setBandera() {
         this.bandera = !this.bandera;
+    }
+    getCantBomb() {
+        return this.cantBomb;
+    }
+    setCantBomb(cantBomb) {
+        this.cantBomb = cantBomb;
     }
 }
