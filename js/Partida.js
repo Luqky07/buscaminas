@@ -37,7 +37,7 @@ export class Partida {
     */
     printTablero() {
         //this.whereBombs()
-        document.getElementById("time").textContent = this.tiempo.getTime();
+        document.getElementById("time").textContent = this.tiempo.getTime(false);
         document.getElementById("info").removeAttribute("class");
         this.printBanderas();
         let campo = document.getElementById("campo");
@@ -93,7 +93,7 @@ export class Partida {
                         if(this.firstTry) {
                             this.setFirstTry();
                             this.intervalo = setInterval(() => {
-                                document.getElementById("time").textContent = this.tiempo.getTime();
+                                document.getElementById("time").textContent = this.tiempo.getTime(true);
                             }, 1000);
                         }
                         if (this.finish) {

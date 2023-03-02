@@ -12,14 +12,14 @@ export class Tiempo {
             this.minutos++;
         }
     }
-    getTime() {
+    getTime(aumentar) {
+        if(aumentar) this.aumentarTiempo();
         let res = "Tiempo ";
         if (this.minutos < 10) res += "0" + this.minutos;
         else res += this.minutos;
         res += ":";
         if (this.segundos < 10) res += "0" + this.segundos;
         else res += this.segundos;
-        this.aumentarTiempo();
         return res;
     }
 }
